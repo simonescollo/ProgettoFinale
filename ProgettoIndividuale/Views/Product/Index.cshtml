@@ -1,8 +1,8 @@
-﻿@model List<ProductViewModel>
+﻿@model ProductListViewModel
 
 <table border="1">
     <tr><td>Nome Prodotto</td><td>Prezzo unitario</td><td>In Vendita</td><td></td></tr>
-    @foreach (ProductViewModel elemento in Model)
+    @foreach (ProductViewModel elemento in Model.ProductList)
     {
         <tr>
             <td>@elemento.ProductName</td>
@@ -23,3 +23,5 @@
 <a class="btn btn-primary" asp-controller="Product" asp-action="Save">
     Aggiungi
 </a>
+
+@await Html.PartialAsync("_Pagination", Model.Pagination)

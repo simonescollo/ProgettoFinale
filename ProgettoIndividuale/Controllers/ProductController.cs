@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProgettoIndividuale.Domain;
-using ProgettoIndividuale.EF.Data;
 using ProgettoIndividuale.Models;
 using ProgettoIndividuale.Services;
 using ProgettoIndividuale.Utils;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProgettoIndividuale.Controllers
 {
@@ -18,9 +14,22 @@ namespace ProgettoIndividuale.Controllers
         {
             _service = service;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page, int perPage)
         {
-            return View(_service.GetAll().ProjectToViewModel().ToList());
+            var paginatedQuery = _service.GetAll().ProjectToViewModel().ToPaginated(pageIndex: page, pageSize: perPage);
+
+            var products = paginatedQuery.ToList();
+
+            ProductListViewModel model = new ProductListViewModel()
+            {
+                Pagination = new PaginationViewModel(actualPage: paginatedQuery.PageIndex, maxPage: paginatedQuery.TotalPages - 1, perPage: paginatedQuery.PageSize)
+            };
+
+            foreach (var prodotto in products)
+            {
+                model.ProductList.Add(prodotto);
+            }
+            return View(model);
         }
 
         public IActionResult Delete(int id) 

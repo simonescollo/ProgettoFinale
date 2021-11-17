@@ -1,0 +1,27 @@
+﻿@model PaginationViewModel
+
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="@(Model.ActualPage == 0 ? "page-item disabled" : "page-item")">
+            <a class="page-link" asp-controller="Product" asp-action="Index" asp-route-page="@(Model.ActualPage - 1)" asp-route-perPage="@Model.PerPage" tabindex="-1">Precedente</a>
+        </li>
+        @foreach (var i in HtmlPaginationHelper.PaginationArray(Model.ActualPage, Model.MaxPage))
+        {
+            @if (i == -1)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+            }
+            else
+            {
+                <li class="@(Model.ActualPage == i ? "page-item active" : "page-item")">
+                    <a class="page-link" asp-controller="Product" asp-action="Index" asp-route-page="@i" asp-route-perPage="@Model.PerPage">@(i+1)</a>
+                </li>
+            }
+        }
+        <li class="@(Model.ActualPage == Model.MaxPage ? "page-item disabled" : "page-item")">
+            <a class="page-link" asp-controller="Product" asp-action="Index" asp-route-page="@(Model.ActualPage + 1)" asp-route-perPage="@Model.PerPage">Prossimo</a>
+        </li>
+    </ul>
+</nav>
