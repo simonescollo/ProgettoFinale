@@ -1,4 +1,7 @@
 ﻿@model ProductViewModel
+@{
+    List<SelectListItem> categories = ViewBag.Categories;
+}
 
 <form asp-action="Save" asp-controller="Product" asp-antiforgery="true" method="post" autocomplete="off">
     <input asp-for="ProductId" type="hidden" />
@@ -7,6 +10,16 @@
             <label asp-for="ProductName"></label>
             <input asp-for="ProductName" />
             <span asp-validation-for="ProductName" class="text-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId">
+                @foreach (SelectListItem item in categories)
+                {
+                    <option value="@item.Value" selected="@item.Selected">
+                                    @item.Text
+                    </option>}
+            </select>
         </div>
         <div class="col">
             <label asp-for="UnitPrice"></label>

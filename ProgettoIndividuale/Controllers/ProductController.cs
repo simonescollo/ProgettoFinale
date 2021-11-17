@@ -1,22 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ProgettoIndividuale.Domain;
 using ProgettoIndividuale.Models;
 using ProgettoIndividuale.Services;
 using ProgettoIndividuale.Utils;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ProgettoIndividuale.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProductsServices _service;
-        public ProductController(IProductsServices service)
+        private readonly IProductsServices _prodotti;
+        private readonly ICategoryServices _categorie;
+        public ProductController(IProductsServices prodotti, ICategoryServices categorie)
         {
-            _service = service;
+            _prodotti = prodotti;
+            _categorie = categorie;
         }
         public IActionResult Index(int page, int perPage)
         {
-            var paginatedQuery = _service.GetAll().ProjectToViewModel().ToPaginated(pageIndex: page, pageSize: perPage);
+            var paginatedQuery = _prodotti.GetAll().ProjectToViewModel().ToPaginated(pageIndex: page, pageSize: perPage);
 
             var products = paginatedQuery.ToList();
 
@@ -27,6 +31,7 @@ namespace ProgettoIndividuale.Controllers
 
             foreach (var prodotto in products)
             {
+                prodotto.CategoryName = _categorie.GetById(prodotto.CategoryId).CategoryName;
                 model.ProductList.Add(prodotto);
             }
             return View(model);
@@ -34,7 +39,7 @@ namespace ProgettoIndividuale.Controllers
 
         public IActionResult Delete(int id) 
         {
-            _service.Delete(_service.Get(id));
+            _prodotti.Delete(_prodotti.Get(id));
             return RedirectToAction("Index");
         }
 
@@ -45,13 +50,27 @@ namespace ProgettoIndividuale.Controllers
 
             if (id != 0)
             {
-                elemento = _service.Get(id);
+                elemento = _prodotti.Get(id);
             }
             else
             {
                 elemento = new();
                 elemento.ProductId = id;
             }
+
+            var categories = _categorie.GetById();
+            List<SelectListItem> c = new();
+            foreach (Category cat in categories)
+            {
+                var selected = id == 0 ? false : elemento.CategoryId == cat.CategoryId;
+                c.Add(new SelectListItem
+                {
+                    Selected = selected,
+                    Text = cat.CategoryName,
+                    Value = cat.CategoryId.ToString()
+                });
+            }
+            ViewBag.Categories = c;
             return View("Save", elemento.ProjectToViewModel());
         }
         [HttpPost]
@@ -62,12 +81,12 @@ namespace ProgettoIndividuale.Controllers
             {
                 if (elemento.ProductId != 0)
                 {
-                    _service.Update(elemento.ProjectFromViewModel());
+                    _prodotti.Update(elemento.ProjectFromViewModel());
                 }
                 else
                 {
-                    elemento.ProductId = _service.GetAll().ToList().Count() + 1;
-                    _service.Insert(elemento.ProjectFromViewModel());
+                    elemento.ProductId = _prodotti.GetAll().ToList().Count() + 1;
+                    _prodotti.Insert(elemento.ProjectFromViewModel());
                 }
                 return RedirectToAction("Index");
             }

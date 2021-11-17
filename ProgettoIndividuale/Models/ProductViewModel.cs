@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProgettoIndividuale.Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,6 +16,9 @@ namespace ProgettoIndividuale.Models
         public string ProductName { get; set; }
 
         public int? CategoryId { get; set; }
+        [Required]
+        [StringLength(15)]
+        public string CategoryName { get; set; }
         [Required(ErrorMessage = "Campo obligatorio")]
         public decimal? UnitPrice { get; set; }
         //[Required(ErrorMessage = "Campo obligatorio")]
@@ -23,5 +27,6 @@ namespace ProgettoIndividuale.Models
         public bool Discontinued { get; set; }
         //[Required(ErrorMessage = "Campo obligatorio")]
         public string QuantityPerUnit { get; set; }
+
     }
 }

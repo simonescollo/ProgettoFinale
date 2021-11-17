@@ -29,6 +29,7 @@ namespace ProgettoIndividuale
             services.AddDbContext<NORTHWINDContext>(options =>
                             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IProductsServices, ProductsServices>();
+            services.AddTransient<ICategoryServices, CategorySrevices>();
 
             services.AddControllersWithViews();
         }

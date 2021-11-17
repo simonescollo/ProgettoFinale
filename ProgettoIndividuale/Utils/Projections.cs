@@ -41,7 +41,7 @@ namespace ProgettoIndividuale.Utils
         internal static IEnumerable<Products> ProjectToDbModel(this IEnumerable<Product> query)
         {
             return query.Select(x => new Products()
-           {
+            {
                 ProductId = x.ProductId,
                 ProductName = x.ProductName,
                 CategoryId = x.CategoryId,
@@ -105,6 +105,26 @@ namespace ProgettoIndividuale.Utils
                 UnitsInStock = prodotto.UnitsInStock,
                 Discontinued = prodotto.Discontinued,
                 QuantityPerUnit = prodotto.QuantityPerUnit,
+            };
+        }
+
+        internal static IEnumerable<Category> ProjectToDomainCategory(this IQueryable<Categories> query)
+        {
+            return query.Select(x => new Category()
+            {
+                CategoryId = x.CategoryId,
+                CategoryName = x.CategoryName,
+                Description = x.Description,
+            });
+        }
+
+        internal static Category ProjectToDomainCategory(this Categories categoria)
+        {
+            return new Category()
+            {
+                CategoryId = categoria.CategoryId,
+                CategoryName = categoria.CategoryName,
+                Description = categoria.Description,
             };
         }
     }
