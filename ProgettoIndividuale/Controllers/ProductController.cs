@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ProgettoIndividuale.Domain;
 using ProgettoIndividuale.Models;
 using ProgettoIndividuale.Services;
+using ProgettoIndividuale.Services.Request;
 using ProgettoIndividuale.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,50 @@ namespace ProgettoIndividuale.Controllers
                 model.ProductList.Add(prodotto);
             }
             return View(model);
+        }
+
+        public IActionResult RisultatoRicerca(ProductListViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Search()
+        {
+            ProductViewModel model = new();
+            var categories = _categorie.GetAll();
+            List<SelectListItem> c = new();
+            foreach (Category cat in categories)
+            {
+                var selected = model.CategoryId == 0 ? false : model.CategoryId == cat.CategoryId;
+                c.Add(new SelectListItem
+                {
+                    Selected = selected,
+                    Text = cat.CategoryName,
+                    Value = cat.CategoryId.ToString()
+                });
+            }
+            ViewBag.Categories = c;
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Search(ProductViewModel model)
+        {
+            ProductSearchRequest request = new();
+            request.ProductName = model.ProductName;
+            request.CategoryId = model.CategoryId;
+            var q = _prodotti.Search(request).ProjectToViewModel().ToPaginated(pageIndex: 1, pageSize: 10);
+            ProductListViewModel risultato = new() {
+                Pagination = new PaginationViewModel(actualPage: q.PageIndex, maxPage: q.TotalPages - 1, perPage: q.PageSize),
+                };
+            foreach (var prodotto in q.ToList())
+            {
+                prodotto.CategoryName = _categorie.GetById(prodotto.CategoryId).CategoryName;
+                risultato.ProductList.Add(prodotto);
+            }
+            return View("RisultatoRicerca",risultato);
+
         }
 
         public IActionResult Delete(int id) 

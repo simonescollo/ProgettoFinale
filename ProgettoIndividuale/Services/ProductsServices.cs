@@ -1,5 +1,6 @@
 ﻿using ProgettoIndividuale.Domain;
 using ProgettoIndividuale.EF.Data;
+using ProgettoIndividuale.Services.Request;
 using ProgettoIndividuale.Utils;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,14 @@ namespace ProgettoIndividuale.Services
             _context.Products.Update(_context.Products.FirstOrDefault(x => x.ProductId == element.ProductId));
             _context.SaveChanges();
             return element;
+        }
+
+        public IEnumerable<Product> Search(ProductSearchRequest request)
+        {
+            var q = _context.Products.AsQueryable();
+            if (request.CategoryId.HasValue) q = q.Where(x => x.CategoryId == request.CategoryId);
+            if (!(string.IsNullOrEmpty(request.ProductName))) q = q.Where(x => x.ProductName.Contains(request.ProductName));
+            return q.ProjectToDomain();
         }
     }
 }

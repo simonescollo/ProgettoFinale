@@ -1,0 +1,21 @@
+﻿@model ProductListViewModel
+
+
+<table border="1">
+    <tr><td>Nome Prodotto</td><td>Nome Categoria</td><td>Prezzo unitario</td><td>In Vendita</td><td></td></tr>
+    @foreach (ProductViewModel elemento in Model.ProductList)
+    {
+        <tr>
+            <td>@elemento.ProductName</td>
+            <td>@elemento.CategoryName</td>
+            <td>@elemento.UnitPrice</td>
+            <td>@(elemento.Discontinued ? "Si" : "No")</td>
+            <td>
+            </td>
+        </tr>
+    }
+</table>
+
+<a class="btn btn-secondary" asp-controller="Product" asp-action="Index">
+    Torna alla lista
+</a>

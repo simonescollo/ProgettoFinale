@@ -2,26 +2,31 @@
 
 
 <table border="1">
-    <tr><td>Nome Prodotto</td><td>Nome Categoria</td><td>Prezzo unitario</td><td>In Vendita</td><td></td></tr>
+    <tr><td>Nome Prodotto</td><td>Nome Categoria</td><td>Quantità per pezzo</td><td>Prezzo unitario</td><td>Unità in stock</td><td>Unità ordinate</td><td>In Vendita</td><td></td></tr>
     @foreach (ProductViewModel elemento in Model.ProductList)
     {
-        <tr>
-            <td>@elemento.ProductName</td>
-            <td>@elemento.CategoryName</td>
-            <td>@elemento.UnitPrice</td>
-            <td>@(elemento.Discontinued ? "Si" : "No")</td>
-            <td>
-                <a class="btn btn-primary" asp-controller="Product" asp-action="Save" asp-route-id="@elemento.ProductId">
-                    Modifica
-                </a>
-                <a class="btn btn-primary" asp-controller="Product" asp-action="Delete" asp-route-id="@elemento.ProductId">
-                    Cancella
-                </a>
-            </td>
-        </tr>
+<tr>
+    <td>@elemento.ProductName</td>
+    <td>@elemento.CategoryName</td>
+    <td>@elemento.QuantityPerUnit</td>
+    <td>@elemento.UnitPrice</td>
+    <td>@elemento.UnitsInStock</td>
+    <td>@(elemento.Discontinued ? "Si" : "No")</td>
+    <td>
+        <a class="btn btn-primary" asp-controller="Product" asp-action="Save" asp-route-id="@elemento.ProductId">
+            Modifica
+        </a>
+        <a class="btn btn-primary" asp-controller="Product" asp-action="Delete" asp-route-id="@elemento.ProductId">
+            Cancella
+        </a>
+    </td>
+</tr>
     }
 </table>
 
+<a class="btn btn-primary" asp-controller="Product" asp-action="Search">
+    Cerca
+</a>
 <a class="btn btn-primary" asp-controller="Product" asp-action="Save">
     Aggiungi
 </a>

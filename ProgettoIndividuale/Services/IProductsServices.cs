@@ -1,4 +1,5 @@
 ﻿using ProgettoIndividuale.Domain;
+using ProgettoIndividuale.Services.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace ProgettoIndividuale.Services
     public interface IProductsServices
     {
         IEnumerable<Product> GetAll();
+
+        IEnumerable<Product> Search(ProductSearchRequest request);
 
         Product Get(int id);
 

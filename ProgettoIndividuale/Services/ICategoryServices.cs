@@ -11,5 +11,6 @@ namespace ProgettoIndividuale.Services
         public IEnumerable<Category> GetAll();
 
         public Category GetById(int? id);
+
     }
 }
