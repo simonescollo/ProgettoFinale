@@ -53,7 +53,7 @@ namespace ProgettoIndividuale.Controllers
             {
                 if (elemento.ProductId != 0)
                 {
-                    _service.Update(_service.Get(id));
+                    _service.Update(elemento.ProjectFromViewModel());
                 }
                 else
                 {

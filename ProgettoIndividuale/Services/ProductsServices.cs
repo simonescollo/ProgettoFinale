@@ -34,15 +34,24 @@ namespace ProgettoIndividuale.Services
 
         public Product Insert(Product element)
         {
+            element.ProductId = 0;
             _context.Products.Add(element.ProjectToDbModel());
             _context.SaveChanges();
-            return _context.Products.FirstOrDefault(x => x.ProductId == element.ProductId).ProjectToDomain();
+            int id = _context.Products.ToList().Count();
+            element.ProductId = id;
+            return element;
         }
 
         public Product Update(Product element)
         {
-            _context.Products.Remove(_context.Products.FirstOrDefault(x => x.ProductId == element.ProductId));
-            _context.Products.Add(element.ProjectToDbModel());
+            _context.Products.Attach(_context.Products.FirstOrDefault(x => x.ProductId == element.ProductId));
+            _context.Products.FirstOrDefault(x => x.ProductId == element.ProductId).ProductName = element.ProductName;
+            _context.Products.FirstOrDefault(x => x.ProductId == element.ProductId).CategoryId = element.CategoryId;
+            _context.Products.FirstOrDefault(x => x.ProductId == element.ProductId).Discontinued = element.Discontinued;
+            _context.Products.FirstOrDefault(x => x.ProductId == element.ProductId).QuantityPerUnit = element.QuantityPerUnit;
+            _context.Products.FirstOrDefault(x => x.ProductId == element.ProductId).UnitPrice = element.UnitPrice;
+            _context.Products.FirstOrDefault(x => x.ProductId == element.ProductId).UnitsInStock = element.UnitsInStock;
+            _context.Products.Update(_context.Products.FirstOrDefault(x => x.ProductId == element.ProductId));
             _context.SaveChanges();
             return element;
         }
