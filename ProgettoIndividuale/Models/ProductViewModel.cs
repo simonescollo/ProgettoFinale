@@ -14,9 +14,9 @@ namespace ProgettoIndividuale.Models
 
         [Required(ErrorMessage = "Campo obligatorio")]
         public string ProductName { get; set; }
-
-        public int? CategoryId { get; set; }
         [Required]
+        public int? CategoryId { get; set; }
+        
         [StringLength(15)]
         public string CategoryName { get; set; }
         [Required(ErrorMessage = "Campo obligatorio")]

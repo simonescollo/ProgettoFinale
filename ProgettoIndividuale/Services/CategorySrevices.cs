@@ -16,7 +16,7 @@ namespace ProgettoIndividuale.Services
         {
             _context = context;
         }
-        public IEnumerable<Category> GetById()
+        public IEnumerable<Category> GetAll()
         {
             return _context.Categories.AsQueryable().ProjectToDomainCategory();
         }

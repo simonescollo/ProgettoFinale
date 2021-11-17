@@ -58,7 +58,7 @@ namespace ProgettoIndividuale.Controllers
                 elemento.ProductId = id;
             }
 
-            var categories = _categorie.GetById();
+            var categories = _categorie.GetAll();
             List<SelectListItem> c = new();
             foreach (Category cat in categories)
             {
@@ -77,6 +77,21 @@ namespace ProgettoIndividuale.Controllers
         public IActionResult Save(ProductViewModel elemento)
         {
             int id = elemento.ProductId;
+
+            var categories = _categorie.GetAll();
+            List<SelectListItem> c = new();
+            foreach (Category cat in categories)
+            {
+                var selected = id == 0 ? false : elemento.CategoryId == cat.CategoryId;
+                c.Add(new SelectListItem
+                {
+                    Selected = selected,
+                    Text = cat.CategoryName,
+                    Value = cat.CategoryId.ToString()
+                });
+            }
+            ViewBag.Categories = c;
+
             if (ModelState.IsValid)
             {
                 if (elemento.ProductId != 0)

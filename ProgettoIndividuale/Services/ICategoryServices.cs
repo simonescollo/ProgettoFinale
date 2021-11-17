@@ -8,7 +8,7 @@ namespace ProgettoIndividuale.Services
 {
     public interface ICategoryServices
     {
-        public IEnumerable<Category> GetById();
+        public IEnumerable<Category> GetAll();
 
         public Category GetById(int? id);
     }
